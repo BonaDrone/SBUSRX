@@ -25,11 +25,7 @@
 
 #if defined(__MK20DX128__) || defined(__MK20DX256__)
 // globals needed for emulating two stop bytes on Teensy 3.0 and 3.1/3.2
-IntervalTimer serialTimer;
 HardwareSerial* SERIALPORT;
-uint8_t PACKET[25];
-volatile int SENDINDEX;
-void sendByte();
 #endif
 
 /* SBUS object, input the serial bus */
@@ -47,14 +43,12 @@ void SBUSRX::begin()
     // begin the serial port for SBUS
     _bus->begin(100000,SERIAL_8E1_RXINV_TXINV);
     SERIALPORT = _bus;
-#endif
 
-#if defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__)  // Teensy 3.5 || Teensy 3.6 || Teensy LC 
+#elif defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__)  // Teensy 3.5 || Teensy 3.6 || Teensy LC 
     // begin the serial port for SBUS
     _bus->begin(100000,SERIAL_8E2_RXINV_TXINV);
-#endif
 
-#if defined(__arm__)  // STM32L4
+#elif defined(__arm__)  // STM32L4
     // begin the serial port for SBUS
     _bus->begin(100000,SERIAL_SBUS);
 #endif
@@ -87,7 +81,7 @@ bool SBUSRX::readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames
 bool SBUSRX::read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
 {
     // parse the SBUS packet
-    if(parse()){
+    if (parse()) {
 
         // 16 channels of 11 bit data
         channels[0]  = (int16_t) ((_payload[0]    |_payload[1]<<8)                          & 0x07FF);
