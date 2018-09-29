@@ -20,7 +20,6 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "Arduino.h"
 #include "SBUSRX.h"
 
 /* starts the serial communication */
@@ -28,13 +27,6 @@ void SBUSRX::begin()
 {
     // initialize parsing state
     _fpos = 0;
-
-    /*
-#elif defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__)  // Teensy 3.5 || Teensy 3.6 || Teensy LC 
-    // begin the serial port for SBUS
-    _bus->begin(100000,SERIAL_8E2_RXINV_TXINV);
-#endif*/
-
 }
 
 /* read the SBUS data and calibrate it to +/- 1 */

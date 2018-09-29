@@ -4,3 +4,5 @@ library, q.v. for details.  I made the following modifications:
 * Removed servo code
 
 * Put class library code into src folder
+
+* Moved platform-specific code to [examples](https://github.com/simondlevy/SBUSRX/tree/master/examples)

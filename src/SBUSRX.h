@@ -24,6 +24,16 @@
 
 #include <stdint.h>
 
+// One ifdef needed to support micros() cross-platform
+#if defined(ARDUINO)
+#include <Arduino.h>
+
+#elif defined(__arm__) 
+#if defined(STM32F303)  || defined(STM32F405xx)
+extern "C" { uint32_t micros(void); }
+#endif
+#endif
+
 // Your application should implement these functions
 extern uint8_t sbusSerialAvailable(void);
 extern uint8_t sbusSerialRead(void);
@@ -49,7 +59,6 @@ class SBUSRX {
         const uint8_t _sbusFailSafe = 0x08;
         static const uint8_t _payloadSize = 24;
         uint8_t _payload[_payloadSize];
-        HardwareSerial* _bus;
 
         bool parse();
 };
