@@ -22,13 +22,16 @@
 
 #pragma once
 
-#include "Arduino.h"
+#include <stdint.h>
+
+// Your application should implement these functions
+extern uint8_t sbusSerialAvailable(void);
+extern uint8_t sbusSerialRead(void);
 
 class SBUSRX {
 
     public:
 
-        SBUSRX(HardwareSerial& bus);
         void begin();
         bool read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
         bool readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames);
