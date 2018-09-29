@@ -23,13 +23,6 @@
 #include "Arduino.h"
 #include "SBUSRX.h"
 
-/*
-#if defined(__MK20DX128__) || defined(__MK20DX256__)
-// globals needed for emulating two stop bytes on Teensy 3.0 and 3.1/3.2
-HardwareSerial* SERIALPORT;
-#endif
-*/
-
 /* starts the serial communication */
 void SBUSRX::begin()
 {
@@ -37,11 +30,6 @@ void SBUSRX::begin()
     _fpos = 0;
 
     /*
-#if defined(__MK20DX128__) || defined(__MK20DX256__)  // Teensy 3.0 || Teensy 3.1/3.2
-    // begin the serial port for SBUS
-    _bus->begin(100000,SERIAL_8E1_RXINV_TXINV);
-    SERIALPORT = _bus;
-
 #elif defined(__MK64FX512__) || defined(__MK66FX1M0__) || defined(__MKL26Z64__)  // Teensy 3.5 || Teensy 3.6 || Teensy LC 
     // begin the serial port for SBUS
     _bus->begin(100000,SERIAL_8E2_RXINV_TXINV);

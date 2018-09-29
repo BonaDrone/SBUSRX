@@ -1,5 +1,5 @@
 /*
-   STM32L4.ino SBUSRX example for STM32L4 boards
+   Teensy3012.ino SBUSRX example for Teensy 3.0/1/2 boards
 
    Copyright (C) Simon D. Levy 2018
 
@@ -41,7 +41,7 @@ SBUSRX rx;
 void setup() 
 {
     // begin the serial port for SBUS
-    Serial1.begin(100000, SERIAL_SBUS);
+    Serial1.begin(100000, SERIAL_8E1_RXINV_TXINV);
 
     // begin the SBUS communication
     rx.begin();
