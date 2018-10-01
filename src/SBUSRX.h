@@ -48,17 +48,22 @@ class SBUSRX {
 
     private:
 
+
+        static const uint16_t TIMEOUT = 10000;
+
+        static const uint8_t HEADER      = 0x0F;
+        static const uint8_t FOOTER1     = 0x00;
+        static const uint8_t FOOTER2     = 0x04;
+        static const uint8_t LOST_FRAME  = 0x04;
+        static const uint8_t FAILSAFE    = 0x08;
+
+        static const uint8_t PAYLOADSIZE = 24;
+
+        static constexpr float SCALE = 0.00122025625f;
+        static constexpr float BIAS  = -1.2098840f;
+
         uint8_t _fpos;
-        const uint16_t SBUS_TIMEOUT = 10000;
-        const float _sbusScale = 0.00122025625f;
-        const float _sbusBias = -1.2098840f;
-        const uint8_t _sbusHeader = 0x0F;
-        const uint8_t _sbusFooter = 0x00;
-        const uint8_t _sbus2Footer = 0x04;
-        const uint8_t _sbusLostFrame = 0x04;
-        const uint8_t _sbusFailSafe = 0x08;
-        static const uint8_t _payloadSize = 24;
-        uint8_t _payload[_payloadSize];
+        uint8_t _payload[PAYLOADSIZE];
 
         bool parse();
 };

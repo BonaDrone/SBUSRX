@@ -39,7 +39,7 @@ bool SBUSRX::readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames
 
         // linear calibration
         for(uint8_t i = 0; i < 16; i++){
-            calChannels[i] = channels[i] * _sbusScale + _sbusBias;
+            calChannels[i] = channels[i] * SCALE + BIAS;
         }
 
         // return true on receiving a full packet
@@ -77,12 +77,12 @@ bool SBUSRX::read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
         channels[15] = (int16_t) ((_payload[20]>>5|_payload[21]<<3)                         & 0x07FF);
 
         // count lost frames
-        if (_payload[22] & _sbusLostFrame) {
+        if (_payload[22] & LOST_FRAME) {
             *lostFrames = *lostFrames + 1;
         }
 
         // failsafe state
-        if (_payload[22] & _sbusFailSafe) {
+        if (_payload[22] & FAILSAFE) {
             *failsafe = 1;
         } 
         else{
@@ -109,7 +109,7 @@ bool SBUSRX::parse()
     sbusTime = currTime - startTime;
     startTime = currTime;
 
-    if(sbusTime > SBUS_TIMEOUT){_fpos = 0;}
+    if(sbusTime > TIMEOUT){_fpos = 0;}
 
     // see if serial data is available
     while(sbusSerialAvailable() > 0){
@@ -120,7 +120,7 @@ bool SBUSRX::parse()
 
         // find the header
         if(_fpos == 0){
-            if((c == _sbusHeader)&&((b == _sbusFooter)||((b & 0x0F) == _sbus2Footer))){
+            if((c == HEADER)&&((b == FOOTER1)||((b & 0x0F) == FOOTER2))){
                 _fpos++;
             }
             else{
@@ -130,14 +130,14 @@ bool SBUSRX::parse()
         else{
 
             // strip off the data
-            if((_fpos-1) < _payloadSize){
+            if((_fpos-1) < PAYLOADSIZE){
                 _payload[_fpos-1] = c;
                 _fpos++;
             }
 
             // check the end byte
-            if((_fpos-1) == _payloadSize){
-                if((c == _sbusFooter)||((c & 0x0F) == _sbus2Footer)) {
+            if((_fpos-1) == PAYLOADSIZE){
+                if((c == FOOTER1)||((c & 0x0F) == FOOTER2)) {
                     _fpos = 0;
                     return true;
                 }
