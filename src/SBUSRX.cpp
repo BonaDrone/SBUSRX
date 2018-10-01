@@ -30,12 +30,12 @@ SBUSRX::SBUSRX()
     _fpos = 0;
 }
 
-bool SBUSRX::readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames)
+bool SBUSRX::getChannelValuesNormalized(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames)
 {
     uint16_t channels[16];
 
     // read the SBUS data
-    if(read(&channels[0],failsafe,lostFrames)){
+    if(getChannelValues(&channels[0],failsafe,lostFrames)){
 
         // linear calibration
         for(uint8_t i = 0; i < 16; i++){
@@ -52,7 +52,7 @@ bool SBUSRX::readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames
     }
 }
 
-bool SBUSRX::read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
+bool SBUSRX::getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
 {
     // parse the SBUS packet
     if (parse()) {

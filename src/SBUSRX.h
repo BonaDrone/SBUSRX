@@ -44,9 +44,9 @@ class SBUSRX {
 
         SBUSRX(void);
 
-        bool read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
+        bool getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
 
-        bool readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames);
+        bool getChannelValuesNormalized(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames);
 
     private:
 
