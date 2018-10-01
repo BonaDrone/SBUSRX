@@ -20,16 +20,16 @@
    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <debug.hpp>
+
 #include "SBUSRX.h"
 
-/* starts the serial communication */
-void SBUSRX::begin()
+SBUSRX::SBUSRX()
 {
     // initialize parsing state
     _fpos = 0;
 }
 
-/* read the SBUS data and calibrate it to +/- 1 */
 bool SBUSRX::readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames)
 {
     uint16_t channels[16];
@@ -52,7 +52,6 @@ bool SBUSRX::readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames
     }
 }
 
-/* read the SBUS data */
 bool SBUSRX::read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
 {
     // parse the SBUS packet
@@ -99,7 +98,6 @@ bool SBUSRX::read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
     }
 }
 
-/* parse the SBUS data */
 bool SBUSRX::parse()
 {
     // A workaround to emulate Teensy's elapsedTime support
@@ -112,11 +110,14 @@ bool SBUSRX::parse()
     if(sbusTime > TIMEOUT){_fpos = 0;}
 
     // see if serial data is available
-    while(sbusSerialAvailable() > 0){
+    while (sbusSerialAvailable() > 0) {
+
         sbusTime = 0;
         static uint8_t c;
         static uint8_t b;
         c = sbusSerialRead();
+
+        hf::Debug::printf("%02X\n", c);
 
         // find the header
         if(_fpos == 0){

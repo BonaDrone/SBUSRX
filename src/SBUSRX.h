@@ -42,8 +42,10 @@ class SBUSRX {
 
     public:
 
-        void begin();
+        SBUSRX(void);
+
         bool read(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
+
         bool readCal(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames);
 
     private:
