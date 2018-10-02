@@ -43,9 +43,6 @@ void setup()
     // begin the serial port for SBUS
     Serial1.begin(100000, SERIAL_8E2_RXINV_TXINV);
 
-    // begin the SBUS communication
-    rx.begin();
-
     // begin serial-monitor communication
     Serial.begin(115200);
 }
@@ -59,12 +56,14 @@ static void showaxis(const char * label, float axval)
 
 void loop() 
 {
-    uint8_t failSafe;
-    uint16_t lostFrames = 0;
-    float channels[16];
+    if (rx.gotNewFrame()) {
 
-    // look for a good SBUS packet from the receiver
-    if(rx.readCal(&channels[0], &failSafe, &lostFrames)){
+        uint8_t failSafe;
+        uint16_t lostFrames = 0;
+        float channels[16];
+
+        // look for a good SBUS packet from the receiver
+        rx.getChannelValuesNormalized(channels, &failSafe, &lostFrames);
 
         // First five channels (Throttle, Aieleron, Elevator, Rudder, Auxiliary) are enough to see whether it's working
         showaxis("Thr",  channels[0]);
@@ -77,6 +76,6 @@ void loop()
         Serial.print(failSafe);
         Serial.print("    Lost frames: ");
         Serial.println(lostFrames);
-     }
+    }
 }
 

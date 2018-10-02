@@ -44,9 +44,11 @@ class SBUSRX {
 
         SBUSRX(void);
 
-        bool getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
+        bool gotNewFrame();
 
-        bool getChannelValuesNormalized(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames);
+        void getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
+
+        void getChannelValuesNormalized(float* calChannels, uint8_t* failsafe, uint16_t* lostFrames);
 
     private:
 
@@ -66,6 +68,4 @@ class SBUSRX {
 
         uint8_t _fpos;
         uint8_t _payload[PAYLOADSIZE];
-
-        bool gotNewFrame();
 };
