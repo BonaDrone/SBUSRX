@@ -5,4 +5,6 @@ library, q.v. for details.  I made the following modifications:
 
 * Put class library code into src folder
 
+* Added support for interrupt-based interaction
+
 * Moved platform-specific code to [examples](https://github.com/simondlevy/SBUSRX/tree/master/examples)

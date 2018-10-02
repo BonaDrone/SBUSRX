@@ -44,7 +44,9 @@ class SBUSRX {
 
         SBUSRX(void);
 
-        bool gotNewFrame();
+        void handleSerialEvent(uint32_t usec);
+
+        bool gotNewFrame(void);
 
         void getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames);
 
@@ -68,4 +70,5 @@ class SBUSRX {
 
         uint8_t _fpos;
         uint8_t _payload[PAYLOADSIZE];
+        bool    _gotNewFrame;
 };

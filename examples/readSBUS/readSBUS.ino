@@ -1,5 +1,5 @@
 /*
-   STM32L4.ino SBUSRX example for STM32L4 boards
+   readSBUS.ino : simple example of reading from SBUS receiver
 
    Copyright (C) Simon D. Levy 2018
 
@@ -18,9 +18,10 @@
    along with SBUSRX.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// This example reads an SBUS packet from an
-// SBUS receiver (FrSky XM) and reports the
-// channel values to the serial monitor
+// Pick one
+static const uint16_t SERIAL_MODE = SERIAL_SBUS;            // STM32L4
+//static const uint16_t SERIAL_MODE = SERIAL_8E1_RXINV_TXINV; // Teensy 3.0,3.1,3.2
+//static const uint16_t SERIAL_MODE = SERIAL_8E2_RXINV_TXINV; // Teensy 3.5,3.6
 
 #include "SBUSRX.h"
 
@@ -38,10 +39,15 @@ uint8_t sbusSerialRead(void)
 
 SBUSRX rx;
 
+void serialEvent1(void)
+{
+    rx.handleSerialEvent(micros());
+}
+
 void setup() 
 {
     // begin the serial port for SBUS
-    Serial1.begin(100000, SERIAL_SBUS);
+    Serial1.begin(100000, SERIAL_MODE);
 
     // begin serial-monitor communication
     Serial.begin(115200);

@@ -24,7 +24,7 @@
 
 #include "SBUSRX.h"
 
-SBUSRX::SBUSRX()
+SBUSRX::SBUSRX(void)
 {
     // initialize parsing state
     _fpos = 0;
@@ -77,18 +77,19 @@ void SBUSRX::getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* l
     }
 }
 
-bool SBUSRX::gotNewFrame()
+void SBUSRX::handleSerialEvent(uint32_t usec)
 {
-    // A workaround to emulate Teensy's elapsedTime support
     static uint32_t startTime;
     static uint32_t sbusTime;
-    uint32_t currTime = micros();
+    uint32_t currTime = usec;
     sbusTime = currTime - startTime;
     startTime = currTime;
 
-    if(sbusTime > TIMEOUT){_fpos = 0;}
+    if(sbusTime > TIMEOUT){
+        _fpos = 0;
+    }
 
-    // see if serial data is available
+    // See whether serial data is available
     while (sbusSerialAvailable() > 0) {
 
         sbusTime = 0;
@@ -96,8 +97,8 @@ bool SBUSRX::gotNewFrame()
         static uint8_t b;
         c = sbusSerialRead();
 
-        // find the header
-        if(_fpos == 0){
+        // Find the header
+        if(_fpos == 0) {
             if((c == HEADER)&&((b == FOOTER1)||((b & 0x0F) == FOOTER2))){
                 _fpos++;
             }
@@ -105,29 +106,41 @@ bool SBUSRX::gotNewFrame()
                 _fpos = 0;
             }
         }
-        else{
+        else {
 
-            // strip off the data
+            // Strip off the data
             if((_fpos-1) < PAYLOADSIZE){
                 _payload[_fpos-1] = c;
                 _fpos++;
             }
 
-            // check the end byte
+            // Check the end byte
             if((_fpos-1) == PAYLOADSIZE){
                 if((c == FOOTER1)||((c & 0x0F) == FOOTER2)) {
                     _fpos = 0;
-                    return true;
+                    _gotNewFrame = true;
+                    return;
                 }
                 else{
                     _fpos = 0;
-                    return false;
+                    _gotNewFrame = false;
+                    return;
                 }
             }
         }
         b = c;
     }
 
-    // return false if a partial packet
-    return false;
+    // Partial packet
+    _gotNewFrame = false;
+}
+
+
+bool SBUSRX::gotNewFrame(void)
+{
+    bool retval = _gotNewFrame;
+    if (_gotNewFrame) {
+        _gotNewFrame = false;
+    }
+    return retval;
 }
