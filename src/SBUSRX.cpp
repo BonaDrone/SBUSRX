@@ -117,8 +117,6 @@ bool SBUSRX::parse()
         static uint8_t b;
         c = sbusSerialRead();
 
-        hf::Debug::printf("%02X\n", c);
-
         // find the header
         if(_fpos == 0){
             if((c == HEADER)&&((b == FOOTER1)||((b & 0x0F) == FOOTER2))){
