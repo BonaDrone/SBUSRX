@@ -24,16 +24,6 @@
 
 #include <stdint.h>
 
-// One ifdef needed to support micros() cross-platform
-#if defined(ARDUINO)
-#include <Arduino.h>
-
-#elif defined(__arm__) 
-#if defined(STM32F303)  || defined(STM32F405xx)
-extern "C" { uint32_t micros(void); }
-#endif
-#endif
-
 // Your application should implement these functions
 extern uint8_t sbusSerialAvailable(void);
 extern uint8_t sbusSerialRead(void);
