@@ -67,5 +67,5 @@ class SBUSRX {
         uint8_t _fpos;
         uint8_t _payload[PAYLOADSIZE];
 
-        bool parse();
+        bool gotNewFrame();
 };

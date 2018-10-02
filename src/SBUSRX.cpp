@@ -54,8 +54,8 @@ bool SBUSRX::getChannelValuesNormalized(float* calChannels, uint8_t* failsafe, u
 
 bool SBUSRX::getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* lostFrames)
 {
-    // parse the SBUS packet
-    if (parse()) {
+    // gotNewFrame the SBUS packet
+    if (gotNewFrame()) {
 
         // 16 channels of 11 bit data
         channels[0]  = (int16_t) ((_payload[0]    |_payload[1]<<8)                          & 0x07FF);
@@ -98,7 +98,7 @@ bool SBUSRX::getChannelValues(uint16_t* channels, uint8_t* failsafe, uint16_t* l
     }
 }
 
-bool SBUSRX::parse()
+bool SBUSRX::gotNewFrame()
 {
     // A workaround to emulate Teensy's elapsedTime support
     static uint32_t startTime;
